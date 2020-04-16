@@ -109,10 +109,13 @@ def cleanup_routers(cloud, routers):
             remove_default_gateway(cloud, uuid)
             cloud.update_router(uuid, admin_state_up=False)
             for port in cloud.list_router_interfaces(router):
-                cloud.update_port(port['id'], device_id='',
-                                  admin_state_up=False)
-                cloud.delete_port(port['id'])
-                Summary.num_of_ports += 1
+                try:
+                    cloud.update_port(port['id'], device_id='',
+                                      admin_state_up=False)
+                    cloud.delete_port(port['id'])
+                    Summary.num_of_ports += 1
+                except shade.exc.OpenStackCloudHTTPError:
+                    pass
             cloud.delete_router(uuid)
             Summary.num_of_routers += 1
         except shade.exc.OpenStackCloudHTTPError:
