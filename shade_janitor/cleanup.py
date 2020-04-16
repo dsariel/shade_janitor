@@ -31,8 +31,11 @@ def dry_cleanup_instances(instances):
 def cleanup_stacks(cloud, stacks):
     """Cleanup stacks."""
     for uuid in stacks:
-        Summary.num_of_stacks += 1
-        cloud.delete_stack(uuid)
+        try:
+            cloud.delete_stack(uuid)
+            Summary.num_of_stacks += 1
+        except shade.exc.OpenStackCloudHTTPError:
+            pass
 
 
 def dry_cleanup_stacks(stacks):
@@ -45,8 +48,11 @@ def dry_cleanup_stacks(stacks):
 def cleanup_ports(cloud, ports):
     """Cleanup ports."""
     for uuid in ports:
-        Summary.num_of_ports += 1
-        cloud.delete_port(uuid)
+        try:
+            cloud.delete_port(uuid)
+            Summary.num_of_ports += 1
+        except shade.exc.OpenStackCloudHTTPError:
+            pass
 
 
 def dry_cleanup_ports(ports):
@@ -76,9 +82,11 @@ def dry_cleanup_subnets(subnets):
 def cleanup_networks(cloud, networks):
     """Cleanup networks."""
     for uuid in networks:
-        Summary.num_of_networks += 1
-        cloud.delete_network(uuid)
-
+        try:
+            cloud.delete_network(uuid)
+            Summary.num_of_networks += 1
+        except shade.exc.OpenStackCloudHTTPError:
+            pass
 
 def dry_cleanup_networks(networks):
     """Dry cleanup of networks."""
@@ -120,8 +128,11 @@ def dry_cleanup_routers(routers):
 def cleanup_floating_ips(cloud, floating_ips):
     """Cleanup floating IPs."""
     for uuid in floating_ips:
-        Summary.num_of_floating_ips += 1
-        cloud.delete_floating_ip(uuid)
+        try:
+            cloud.delete_floating_ip(uuid)
+            Summary.num_of_floating_ips += 1
+        except shade.exc.OpenStackCloudHTTPError:
+            pass
 
 
 def dry_cleanup_floating_ips(floating_ips):
@@ -134,11 +145,13 @@ def dry_cleanup_floating_ips(floating_ips):
 def cleanup_keypairs(cloud, keypairs):
     """Cleanup keypairs."""
     for uuid in keypairs:
-        Summary.num_of_keypairs += 1
-        cloud.delete_keypair(keypairs[uuid]['name'])
+        try:
+            cloud.delete_keypair(keypairs[uuid]['name'])
+            Summary.num_of_keypairs += 1
+        except shade.exc.OpenStackCloudHTTPError:
+            pass
 
-
-def dry_cleanup_keypairs(keypairs):
+def dry_cleanup_keypair(keypairs):
     """Dry cleanup keypairs."""
     for uuid in keypairs:
         Summary.num_of_keypairs += 1
