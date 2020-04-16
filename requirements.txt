@@ -1,3 +1,4 @@
-shade
-python-dateutil
-pytz
+shade==1.32.0
+python-dateutil==2.8.0
+pytz==2019.2
+
